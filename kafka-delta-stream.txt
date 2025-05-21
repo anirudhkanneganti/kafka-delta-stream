@@ -1,0 +1,121 @@
+& "C:\spark\spark-3.5.5-bin-hadoop3-scala2.13\bin\spark-submit" --jars "jars\spark-sql-kafka-0-10_2.13-3.5.0.jar,jars\spark-token-provider-kafka-0-10_2.13-3.5.0.jar,jars\kafka-clients-3.5.1.jar,jars\delta-core_2.13-2.4.0.jar,jars\commons-pool2-2.11.1.jar" C:\Users\neelu\kafka-delta-stream\spark\test_kafka_spark_stream.py
+
+cd $env:KAFKA_HOME
+
+.\bin\windows\kafka-storage.bat format -t $(.\bin\windows\kafka-storage.bat random-uuid) -c .\config\kraft\server.properties
+
+.\bin\windows\kafka-server-start.bat .\config\kraft\server.properties
+
+.\bin\windows\kafka-topics.bat --create --topic test-topic --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+
+.\bin\windows\kafka-topics.bat --list --bootstrap-server localhost:9092
+
+
+KAFKA Producer Console log:
+
+PS C:\Users\neelu\kafka-delta-stream> ..\myenv\Scripts\activate.ps1                                                                                                  
+(myenv) PS C:\Users\neelu\kafka-delta-stream> python .\kafka\create_topics.py
+Topics created.
+(myenv) PS C:\Users\neelu\kafka-delta-stream> python .\kafka\producer.py                                                                                             
+Sending to retail_orders_us: {'order_id': 'ORD001', 'product_id': 'P106', 'quantity': '2', 'price': '179.01', 'country': 'US', 'channel': 'mobile', 'timestamp': '2025-04-07T10:00:00Z'}
+Sending to retail_orders_others: {'order_id': 'ORD002', 'product_id': 'P114', 'quantity': '3', 'price': '63.37', 'country': 'UK', 'channel': 'online', 'timestamp': '2025-04-07T10:00:15Z'}
+Sending to retail_orders_others: {'order_id': 'ORD003', 'product_id': 'P102', 'quantity': '2', 'price': '199.34', 'country': 'CA', 'channel': 'mobile', 'timestamp': '2025-04-07T10:00:30Z'}
+Sending to retail_orders_us: {'order_id': 'ORD004', 'product_id': 'P108', 'quantity': '3', 'price': '129.7', 'country': 'US', 'channel': 'online', 'timestamp': '2025-04-07T10:00:45Z'}
+Sending to retail_orders_in: {'order_id': 'ORD005', 'product_id': 'P116', 'quantity': '4', 'price': '100.23', 'country': 'IN', 'channel': 'store', 'timestamp': '2025-04-07T10:01:00Z'}
+Sending to retail_orders_others: {'order_id': 'ORD006', 'product_id': 'P130', 'quantity': '3', 'price': '62.13', 'country': 'GE', 'channel': 'online', 'timestamp': '2025-04-07T10:01:15Z'}
+Sending to retail_orders_us: {'order_id': 'ORD007', 'product_id': 'P125', 'quantity': '1', 'price': '130.6', 'country': 'US', 'channel': 'mobile', 'timestamp': '2025-04-07T10:01:30Z'}
+Sending to retail_orders_others: {'order_id': 'ORD008', 'product_id': 'P142', 'quantity': '2', 'price': '56.82', 'country': 'UK', 'channel': 'mobile', 'timestamp': '2025-04-07T10:01:45Z'}
+Sending to retail_orders_us: {'order_id': 'ORD009', 'product_id': 'P141', 'quantity': '3', 'price': '54.91', 'country': 'US', 'channel': 'store', 'timestamp': '2025-04-07T10:02:00Z'}
+Sending to retail_orders_others: {'order_id': 'ORD010', 'product_id': 'P109', 'quantity': '2', 'price': '61.81', 'country': 'GE', 'channel': 'online', 'timestamp': '2025-04-07T10:02:15Z'}
+Sending to retail_orders_others: {'order_id': 'ORD011', 'product_id': 'P110', 'quantity': '3', 'price': '162.12', 'country': 'UK', 'channel': 'online', 'timestamp': '2025-04-07T10:02:30Z'}
+Sending to retail_orders_others: {'order_id': 'ORD012', 'product_id': 'P148', 'quantity': '4', 'price': '15.55', 'country': 'UK', 'channel': 'store', 'timestamp': '2025-04-07T10:02:45Z'}
+Sending to retail_orders_us: {'order_id': 'ORD013', 'product_id': 'P111', 'quantity': '5', 'price': '144.08', 'country': 'US', 'channel': 'online', 'timestamp': '2025-04-07T10:03:00Z'}
+Sending to retail_orders_us: {'order_id': 'ORD014', 'product_id': 'P149', 'quantity': '4', 'price': '131.83', 'country': 'US', 'channel': 'mobile', 'timestamp': '2025-04-07T10:03:15Z'}
+Sending to retail_orders_us: {'order_id': 'ORD015', 'product_id': 'P107', 'quantity': '2', 'price': '39.35', 'country': 'US', 'channel': 'online', 'timestamp': '2025-04-07T10:03:30Z'}
+Sending to retail_orders_others: {'order_id': 'ORD016', 'product_id': 'P122', 'quantity': '4', 'price': '146.53', 'country': 'FR', 'channel': 'mobile', 'timestamp': '2025-04-07T10:03:45Z'}
+Sending to retail_orders_others: {'order_id': 'ORD017', 'product_id': 'P120', 'quantity': '5', 'price': '198.89', 'country': 'GE', 'channel': 'online', 'timestamp': '2025-04-07T10:04:00Z'}
+Sending to retail_orders_others: {'order_id': 'ORD018', 'product_id': 'P137', 'quantity': '2', 'price': '141.92', 'country': 'GE', 'channel': 'mobile', 'timestamp': '2025-04-07T10:04:15Z'}
+Sending to retail_orders_others: {'order_id': 'ORD019', 'product_id': 'P120', 'quantity': '1', 'price': '68.73', 'country': 'GE', 'channel': 'store', 'timestamp': '2025-04-07T10:04:30Z'}
+Sending to retail_orders_in: {'order_id': 'ORD020', 'product_id': 'P121', 'quantity': '5', 'price': '24.83', 'country': 'IN', 'channel': 'store', 'timestamp': '2025-04-07T10:04:45Z'}
+Sending to retail_orders_us: {'order_id': 'ORD021', 'product_id': 'P136', 'quantity': '4', 'price': '107.2', 'country': 'US', 'channel': 'mobile', 'timestamp': '2025-04-07T10:05:00Z'}
+Sending to retail_orders_others: {'order_id': 'ORD022', 'product_id': 'P136', 'quantity': '4', 'price': '183.92', 'country': 'FR', 'channel': 'mobile', 'timestamp': '2025-04-07T10:05:15Z'}
+Sending to retail_orders_others: {'order_id': 'ORD023', 'product_id': 'P108', 'quantity': '2', 'price': '135.57', 'country': 'GE', 'channel': 'online', 'timestamp': '2025-04-07T10:05:30Z'}
+Sending to retail_orders_in: {'order_id': 'ORD024', 'product_id': 'P117', 'quantity': '1', 'price': '112.27', 'country': 'IN', 'channel': 'store', 'timestamp': '2025-04-07T10:05:45Z'}
+Sending to retail_orders_others: {'order_id': 'ORD025', 'product_id': 'P141', 'quantity': '1', 'price': '146.87', 'country': 'CA', 'channel': 'online', 'timestamp': '2025-04-07T10:06:00Z'}
+Sending to retail_orders_others: {'order_id': 'ORD026', 'product_id': 'P111', 'quantity': '3', 'price': '180.84', 'country': 'CA', 'channel': 'mobile', 'timestamp': '2025-04-07T10:06:15Z'}
+Sending to retail_orders_others: {'order_id': 'ORD027', 'product_id': 'P116', 'quantity': '4', 'price': '177.13', 'country': 'FR', 'channel': 'store', 'timestamp': '2025-04-07T10:06:30Z'}
+Sending to retail_orders_us: {'order_id': 'ORD028', 'product_id': 'P125', 'quantity': '1', 'price': '132.08', 'country': 'US', 'channel': 'online', 'timestamp': '2025-04-07T10:06:45Z'}
+Sending to retail_orders_in: {'order_id': 'ORD029', 'product_id': 'P104', 'quantity': '2', 'price': '162.85', 'country': 'IN', 'channel': 'mobile', 'timestamp': '2025-04-07T10:07:00Z'}
+Sending to retail_orders_others: {'order_id': 'ORD030', 'product_id': 'P109', 'quantity': '5', 'price': '192.76', 'country': 'GE', 'channel': 'online', 'timestamp': '2025-04-07T10:07:15Z'}
+Sending to retail_orders_others: {'order_id': 'ORD031', 'product_id': 'P112', 'quantity': '5', 'price': '17.49', 'country': 'CA', 'channel': 'mobile', 'timestamp': '2025-04-07T10:07:30Z'}
+Sending to retail_orders_others: {'order_id': 'ORD032', 'product_id': 'P138', 'quantity': '2', 'price': '32.62', 'country': 'GE', 'channel': 'mobile', 'timestamp': '2025-04-07T10:07:45Z'}
+Sending to retail_orders_others: {'order_id': 'ORD033', 'product_id': 'P113', 'quantity': '3', 'price': '114.42', 'country': 'UK', 'channel': 'online', 'timestamp': '2025-04-07T10:08:00Z'}
+Sending to retail_orders_us: {'order_id': 'ORD034', 'product_id': 'P121', 'quantity': '4', 'price': '168.36', 'country': 'US', 'channel': 'store', 'timestamp': '2025-04-07T10:08:15Z'}
+Sending to retail_orders_us: {'order_id': 'ORD035', 'product_id': 'P108', 'quantity': '1', 'price': '182.69', 'country': 'US', 'channel': 'mobile', 'timestamp': '2025-04-07T10:08:30Z'}
+Sending to retail_orders_others: {'order_id': 'ORD036', 'product_id': 'P118', 'quantity': '1', 'price': '75.77', 'country': 'UK', 'channel': 'store', 'timestamp': '2025-04-07T10:08:45Z'}
+Sending to retail_orders_others: {'order_id': 'ORD037', 'product_id': 'P123', 'quantity': '4', 'price': '50.92', 'country': 'CA', 'channel': 'online', 'timestamp': '2025-04-07T10:09:00Z'}
+Sending to retail_orders_others: {'order_id': 'ORD038', 'product_id': 'P112', 'quantity': '3', 'price': '129.78', 'country': 'UK', 'channel': 'store', 'timestamp': '2025-04-07T10:09:15Z'}
+Sending to retail_orders_others: {'order_id': 'ORD039', 'product_id': 'P104', 'quantity': '2', 'price': '89.69', 'country': 'CA', 'channel': 'mobile', 'timestamp': '2025-04-07T10:09:30Z'}
+Sending to retail_orders_in: {'order_id': 'ORD040', 'product_id': 'P111', 'quantity': '5', 'price': '132.98', 'country': 'IN', 'channel': 'store', 'timestamp': '2025-04-07T10:09:45Z'}
+Sending to retail_orders_in: {'order_id': 'ORD041', 'product_id': 'P145', 'quantity': '4', 'price': '78.65', 'country': 'IN', 'channel': 'mobile', 'timestamp': '2025-04-07T10:10:00Z'}
+Sending to retail_orders_others: {'order_id': 'ORD042', 'product_id': 'P135', 'quantity': '3', 'price': '15.89', 'country': 'UK', 'channel': 'online', 'timestamp': '2025-04-07T10:10:15Z'}
+Sending to retail_orders_us: {'order_id': 'ORD043', 'product_id': 'P104', 'quantity': '1', 'price': '17.48', 'country': 'US', 'channel': 'mobile', 'timestamp': '2025-04-07T10:10:30Z'}
+Sending to retail_orders_in: {'order_id': 'ORD044', 'product_id': 'P131', 'quantity': '1', 'price': '140.59', 'country': 'IN', 'channel': 'store', 'timestamp': '2025-04-07T10:10:45Z'}
+Sending to retail_orders_others: {'order_id': 'ORD045', 'product_id': 'P114', 'quantity': '1', 'price': '13.62', 'country': 'GE', 'channel': 'mobile', 'timestamp': '2025-04-07T10:11:00Z'}
+Sending to retail_orders_others: {'order_id': 'ORD046', 'product_id': 'P144', 'quantity': '2', 'price': '14.98', 'country': 'UK', 'channel': 'store', 'timestamp': '2025-04-07T10:11:15Z'}
+Sending to retail_orders_others: {'order_id': 'ORD047', 'product_id': 'P134', 'quantity': '4', 'price': '112.8', 'country': 'FR', 'channel': 'online', 'timestamp': '2025-04-07T10:11:30Z'}
+Sending to retail_orders_in: {'order_id': 'ORD048', 'product_id': 'P109', 'quantity': '1', 'price': '145.18', 'country': 'IN', 'channel': 'online', 'timestamp': '2025-04-07T10:11:45Z'}
+Sending to retail_orders_others: {'order_id': 'ORD049', 'product_id': 'P122', 'quantity': '4', 'price': '36.13', 'country': 'UK', 'channel': 'online', 'timestamp': '2025-04-07T10:12:00Z'}
+Sending to retail_orders_others: {'order_id': 'ORD050', 'product_id': 'P134', 'quantity': '5', 'price': '152.43', 'country': 'GE', 'channel': 'store', 'timestamp': '2025-04-07T10:12:15Z'}
+Sending to retail_orders_others: {'order_id': 'ORD051', 'product_id': 'P132', 'quantity': '5', 'price': '71.88', 'country': 'CA', 'channel': 'mobile', 'timestamp': '2025-04-07T10:12:30Z'}
+Sending to retail_orders_others: {'order_id': 'ORD052', 'product_id': 'P108', 'quantity': '2', 'price': '158.38', 'country': 'FR', 'channel': 'mobile', 'timestamp': '2025-04-07T10:12:45Z'}
+Sending to retail_orders_us: {'order_id': 'ORD053', 'product_id': 'P103', 'quantity': '4', 'price': '193.33', 'country': 'US', 'channel': 'store', 'timestamp': '2025-04-07T10:13:00Z'}
+Sending to retail_orders_us: {'order_id': 'ORD054', 'product_id': 'P129', 'quantity': '5', 'price': '147.09', 'country': 'US', 'channel': 'store', 'timestamp': '2025-04-07T10:13:15Z'}
+Sending to retail_orders_others: {'order_id': 'ORD055', 'product_id': 'P129', 'quantity': '1', 'price': '56.27', 'country': 'UK', 'channel': 'store', 'timestamp': '2025-04-07T10:13:30Z'}
+Sending to retail_orders_others: {'order_id': 'ORD056', 'product_id': 'P128', 'quantity': '3', 'price': '46.64', 'country': 'UK', 'channel': 'store', 'timestamp': '2025-04-07T10:13:45Z'}
+Sending to retail_orders_others: {'order_id': 'ORD057', 'product_id': 'P105', 'quantity': '1', 'price': '185.78', 'country': 'GE', 'channel': 'mobile', 'timestamp': '2025-04-07T10:14:00Z'}
+Sending to retail_orders_others: {'order_id': 'ORD058', 'product_id': 'P128', 'quantity': '4', 'price': '76.46', 'country': 'FR', 'channel': 'store', 'timestamp': '2025-04-07T10:14:15Z'}
+Sending to retail_orders_us: {'order_id': 'ORD059', 'product_id': 'P127', 'quantity': '3', 'price': '14.9', 'country': 'US', 'channel': 'store', 'timestamp': '2025-04-07T10:14:30Z'}
+Sending to retail_orders_in: {'order_id': 'ORD060', 'product_id': 'P116', 'quantity': '1', 'price': '186.55', 'country': 'IN', 'channel': 'store', 'timestamp': '2025-04-07T10:14:45Z'}
+Sending to retail_orders_in: {'order_id': 'ORD061', 'product_id': 'P127', 'quantity': '5', 'price': '58.89', 'country': 'IN', 'channel': 'online', 'timestamp': '2025-04-07T10:15:00Z'}
+Sending to retail_orders_others: {'order_id': 'ORD062', 'product_id': 'P121', 'quantity': '2', 'price': '132.42', 'country': 'UK', 'channel': 'store', 'timestamp': '2025-04-07T10:15:15Z'}
+Sending to retail_orders_us: {'order_id': 'ORD063', 'product_id': 'P104', 'quantity': '3', 'price': '182.71', 'country': 'US', 'channel': 'online', 'timestamp': '2025-04-07T10:15:30Z'}
+Sending to retail_orders_others: {'order_id': 'ORD064', 'product_id': 'P105', 'quantity': '5', 'price': '155.94', 'country': 'GE', 'channel': 'online', 'timestamp': '2025-04-07T10:15:45Z'}
+Sending to retail_orders_others: {'order_id': 'ORD065', 'product_id': 'P104', 'quantity': '3', 'price': '93.1', 'country': 'GE', 'channel': 'store', 'timestamp': '2025-04-07T10:16:00Z'}
+Sending to retail_orders_others: {'order_id': 'ORD066', 'product_id': 'P139', 'quantity': '2', 'price': '118.44', 'country': 'GE', 'channel': 'mobile', 'timestamp': '2025-04-07T10:16:15Z'}
+Sending to retail_orders_others: {'order_id': 'ORD067', 'product_id': 'P131', 'quantity': '4', 'price': '138.39', 'country': 'FR', 'channel': 'store', 'timestamp': '2025-04-07T10:16:30Z'}
+Sending to retail_orders_others: {'order_id': 'ORD068', 'product_id': 'P136', 'quantity': '3', 'price': '96.13', 'country': 'UK', 'channel': 'online', 'timestamp': '2025-04-07T10:16:45Z'}
+Sending to retail_orders_others: {'order_id': 'ORD069', 'product_id': 'P135', 'quantity': '3', 'price': '158.44', 'country': 'FR', 'channel': 'online', 'timestamp': '2025-04-07T10:17:00Z'}
+Sending to retail_orders_others: {'order_id': 'ORD070', 'product_id': 'P125', 'quantity': '3', 'price': '55.59', 'country': 'FR', 'channel': 'online', 'timestamp': '2025-04-07T10:17:15Z'}
+Sending to retail_orders_others: {'order_id': 'ORD071', 'product_id': 'P147', 'quantity': '1', 'price': '44.61', 'country': 'UK', 'channel': 'store', 'timestamp': '2025-04-07T10:17:30Z'}
+Sending to retail_orders_others: {'order_id': 'ORD072', 'product_id': 'P109', 'quantity': '3', 'price': '73.98', 'country': 'GE', 'channel': 'store', 'timestamp': '2025-04-07T10:17:45Z'}
+Sending to retail_orders_others: {'order_id': 'ORD073', 'product_id': 'P146', 'quantity': '5', 'price': '194.23', 'country': 'GE', 'channel': 'store', 'timestamp': '2025-04-07T10:18:00Z'}
+Sending to retail_orders_in: {'order_id': 'ORD074', 'product_id': 'P103', 'quantity': '2', 'price': '70.78', 'country': 'IN', 'channel': 'mobile', 'timestamp': '2025-04-07T10:18:15Z'}
+Sending to retail_orders_others: {'order_id': 'ORD075', 'product_id': 'P138', 'quantity': '5', 'price': '75.16', 'country': 'UK', 'channel': 'online', 'timestamp': '2025-04-07T10:18:30Z'}
+Sending to retail_orders_others: {'order_id': 'ORD076', 'product_id': 'P147', 'quantity': '2', 'price': '99.59', 'country': 'GE', 'channel': 'mobile', 'timestamp': '2025-04-07T10:18:45Z'}
+Sending to retail_orders_others: {'order_id': 'ORD077', 'product_id': 'P120', 'quantity': '2', 'price': '186.42', 'country': 'CA', 'channel': 'online', 'timestamp': '2025-04-07T10:19:00Z'}
+Sending to retail_orders_in: {'order_id': 'ORD078', 'product_id': 'P128', 'quantity': '3', 'price': '75.71', 'country': 'IN', 'channel': 'online', 'timestamp': '2025-04-07T10:19:15Z'}
+Sending to retail_orders_in: {'order_id': 'ORD079', 'product_id': 'P110', 'quantity': '5', 'price': '146.87', 'country': 'IN', 'channel': 'mobile', 'timestamp': '2025-04-07T10:19:30Z'}
+Sending to retail_orders_others: {'order_id': 'ORD080', 'product_id': 'P120', 'quantity': '3', 'price': '57.16', 'country': 'UK', 'channel': 'online', 'timestamp': '2025-04-07T10:19:45Z'}
+Sending to retail_orders_others: {'order_id': 'ORD081', 'product_id': 'P130', 'quantity': '4', 'price': '60.55', 'country': 'GE', 'channel': 'mobile', 'timestamp': '2025-04-07T10:20:00Z'}
+Sending to retail_orders_others: {'order_id': 'ORD082', 'product_id': 'P100', 'quantity': '2', 'price': '156.9', 'country': 'GE', 'channel': 'store', 'timestamp': '2025-04-07T10:20:15Z'}
+Sending to retail_orders_in: {'order_id': 'ORD083', 'product_id': 'P121', 'quantity': '3', 'price': '80.33', 'country': 'IN', 'channel': 'mobile', 'timestamp': '2025-04-07T10:20:30Z'}
+Sending to retail_orders_in: {'order_id': 'ORD084', 'product_id': 'P100', 'quantity': '2', 'price': '187.84', 'country': 'IN', 'channel': 'store', 'timestamp': '2025-04-07T10:20:45Z'}
+Sending to retail_orders_us: {'order_id': 'ORD085', 'product_id': 'P117', 'quantity': '5', 'price': '51.19', 'country': 'US', 'channel': 'online', 'timestamp': '2025-04-07T10:21:00Z'}
+Sending to retail_orders_others: {'order_id': 'ORD086', 'product_id': 'P117', 'quantity': '5', 'price': '127.56', 'country': 'CA', 'channel': 'mobile', 'timestamp': '2025-04-07T10:21:15Z'}
+Sending to retail_orders_others: {'order_id': 'ORD087', 'product_id': 'P127', 'quantity': '5', 'price': '75.96', 'country': 'UK', 'channel': 'mobile', 'timestamp': '2025-04-07T10:21:30Z'}
+Sending to retail_orders_others: {'order_id': 'ORD088', 'product_id': 'P131', 'quantity': '2', 'price': '67.6', 'country': 'FR', 'channel': 'online', 'timestamp': '2025-04-07T10:21:45Z'}
+Sending to retail_orders_others: {'order_id': 'ORD089', 'product_id': 'P111', 'quantity': '4', 'price': '144.95', 'country': 'FR', 'channel': 'online', 'timestamp': '2025-04-07T10:22:00Z'}
+Sending to retail_orders_others: {'order_id': 'ORD090', 'product_id': 'P118', 'quantity': '2', 'price': '161.11', 'country': 'GE', 'channel': 'mobile', 'timestamp': '2025-04-07T10:22:15Z'}
+Sending to retail_orders_us: {'order_id': 'ORD091', 'product_id': 'P135', 'quantity': '4', 'price': '88.14', 'country': 'US', 'channel': 'online', 'timestamp': '2025-04-07T10:22:30Z'}
+Sending to retail_orders_others: {'order_id': 'ORD092', 'product_id': 'P149', 'quantity': '3', 'price': '176.83', 'country': 'UK', 'channel': 'mobile', 'timestamp': '2025-04-07T10:22:45Z'}
+Sending to retail_orders_others: {'order_id': 'ORD093', 'product_id': 'P102', 'quantity': '4', 'price': '136.1', 'country': 'FR', 'channel': 'mobile', 'timestamp': '2025-04-07T10:23:00Z'}
+Sending to retail_orders_others: {'order_id': 'ORD094', 'product_id': 'P136', 'quantity': '4', 'price': '167.84', 'country': 'GE', 'channel': 'mobile', 'timestamp': '2025-04-07T10:23:15Z'}
+Sending to retail_orders_others: {'order_id': 'ORD095', 'product_id': 'P102', 'quantity': '4', 'price': '41.81', 'country': 'GE', 'channel': 'store', 'timestamp': '2025-04-07T10:23:30Z'}
+Sending to retail_orders_others: {'order_id': 'ORD096', 'product_id': 'P144', 'quantity': '4', 'price': '96.2', 'country': 'CA', 'channel': 'mobile', 'timestamp': '2025-04-07T10:23:45Z'}
+Sending to retail_orders_others: {'order_id': 'ORD097', 'product_id': 'P102', 'quantity': '3', 'price': '70.18', 'country': 'CA', 'channel': 'store', 'timestamp': '2025-04-07T10:24:00Z'}
+Sending to retail_orders_in: {'order_id': 'ORD098', 'product_id': 'P136', 'quantity': '2', 'price': '14.15', 'country': 'IN', 'channel': 'mobile', 'timestamp': '2025-04-07T10:24:15Z'}
+Sending to retail_orders_others: {'order_id': 'ORD099', 'product_id': 'P136', 'quantity': '3', 'price': '93.46', 'country': 'FR', 'channel': 'store', 'timestamp': '2025-04-07T10:24:30Z'}
+Sending to retail_orders_others: {'order_id': 'ORD100', 'product_id': 'P125', 'quantity': '4', 'price': '72.94', 'country': 'UK', 'channel': 'store', 'timestamp': '2025-04-07T10:24:45Z'}
+(myenv) PS C:\Users\neelu\kafka-delta-stream> 
+
